@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "NooroWeather"
 include(":app")
 include(":features:weather")
+include(":libraries:common-android")
+include(":libraries:common")
