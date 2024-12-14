@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "NooroWeather"
 include(":app")
- 
+include(":features:weather")
