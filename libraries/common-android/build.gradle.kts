@@ -33,9 +33,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":libraries:common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+
+    // Data store
+    api(libs.androidx.datastore)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
