@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="no_Selected_city">No City Selected</string>
+    <string name="search_recommendation">Please Search For A City</string>
+    <string name="search_location">Search Location</string>
+
+</resources>

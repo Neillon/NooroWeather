@@ -33,27 +33,29 @@ val Typography = Typography(
         lineHeight = 22.5.sp,
         fontWeight = FontWeight.Medium
     ),
+
     headlineSmall = TextStyle(
         fontFamily = poppinsFamily,
         color = TextHeadline,
-        fontSize = 15.sp,
+        fontSize = 14.sp,
         lineHeight = 22.5.sp,
         fontWeight = FontWeight.SemiBold
     ),
     headlineMedium = TextStyle(
         fontFamily = poppinsFamily,
         color = TextHeadline,
-        fontSize = 30.sp,
+        fontSize = 20.sp,
         lineHeight = 45.sp,
         fontWeight = FontWeight.SemiBold
     ),
     headlineLarge = TextStyle(
         fontFamily = poppinsFamily,
         color = TextHeadline,
-        fontSize = 70.sp,
+        fontSize = 28.sp,
         lineHeight = 105.sp,
         fontWeight = FontWeight.Medium
     ),
+
     titleMedium = TextStyle(
         fontFamily = poppinsFamily,
         color = TextHeadline,
@@ -67,5 +69,14 @@ val Typography = Typography(
         fontSize = 60.sp,
         lineHeight = 90.sp,
         fontWeight = FontWeight.Medium
+    ),
+
+    // Search
+    labelSmall = TextStyle(
+        fontFamily = poppinsFamily,
+        fontSize = 12.sp,
+        color = TextBodySmall,
+        lineHeight = 18.sp,
+        fontWeight = FontWeight.Normal
     ),
 )

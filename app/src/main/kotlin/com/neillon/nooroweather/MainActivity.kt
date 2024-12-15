@@ -22,9 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NooroWeatherTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    WeatherScreen()
-                }
+                WeatherScreen()
             }
         }
     }
