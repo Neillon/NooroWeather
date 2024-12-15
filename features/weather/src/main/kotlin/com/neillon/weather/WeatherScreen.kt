@@ -1,5 +1,6 @@
 package com.neillon.weather
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,16 +27,22 @@ import com.neillon.weather.presentation.ui.CitySearchBar
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
     val state = viewModel.uiState.collectAsStateWithLifecycle()
-    WeatherScreenContent(state.value)
+    WeatherScreenContent(
+        uiState = state.value,
+        onSearch = {
+            Log.i("Neillon", "WeatherScreen: Colling the search with value -> $it")
+        }
+    )
 }
 
 @Composable
 private fun WeatherScreenContent(
     uiState: WeatherUiState,
+    onSearch: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
-            CitySearchBar()
+            CitySearchBar(onSearch = onSearch)
         }
     ) { innerPadding ->
         when (uiState) {
@@ -68,5 +75,5 @@ fun NoSelectedCityContent(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun WeatherScreenPreview() {
-    WeatherScreenContent(WeatherUiState.Empty)
+    WeatherScreenContent(WeatherUiState.Empty, onSearch = {})
 }

@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -18,16 +20,26 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neillon.weather.R
 
 @Composable
-fun CitySearchBar(modifier: Modifier = Modifier) {
+fun CitySearchBar(
+    modifier: Modifier = Modifier,
+    onSearch: (String) -> Unit
+) {
     var text by rememberSaveable { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Box(
-        modifier = modifier.fillMaxWidth().padding(top = 44.dp, start = 24.dp, end = 24.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 44.dp, start = 24.dp, end = 24.dp)
     ) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -61,6 +73,18 @@ fun CitySearchBar(modifier: Modifier = Modifier) {
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search,
+                keyboardType = KeyboardType.Text,
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    if (text.isNotEmpty()) {
+                        keyboardController?.hide()
+                        onSearch(text)
+                    }
+                }
             )
         )
     }
@@ -70,5 +94,5 @@ fun CitySearchBar(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun CitySearchBarPreview() {
-    CitySearchBar()
+    CitySearchBar {}
 }
