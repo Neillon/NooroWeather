@@ -77,4 +77,6 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     implementation(project(":features:weather"))
+    implementation(project(":libraries:common"))
+    implementation(project(":libraries:common-android"))
 }
