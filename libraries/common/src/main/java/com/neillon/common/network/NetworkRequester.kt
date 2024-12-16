@@ -1,4 +1,4 @@
-package com.neillon.common
+package com.neillon.common.network
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

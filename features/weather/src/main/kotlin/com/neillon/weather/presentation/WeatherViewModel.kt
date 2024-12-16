@@ -1,5 +1,6 @@
 package com.neillon.weather.presentation
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -69,6 +70,7 @@ class WeatherViewModel @Inject constructor(
             val weatherData = weatherRepository.search(cityName)
             _uiState.value = WeatherUiState.Searching(cityName, weatherData.toPresentationModel())
         } catch (e: Exception) {
+            Log.i("Neilon", "onSearch: Error trying to serach -> ${e.message}")
             _uiState.value = WeatherUiState.Searching(cityName)
         }
     }
