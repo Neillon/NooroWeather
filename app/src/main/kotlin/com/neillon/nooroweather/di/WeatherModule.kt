@@ -1,5 +1,6 @@
 package com.neillon.nooroweather.di
 
+import com.neillon.nooroweather.BuildConfig
 import com.neillon.weather.data.Constants
 import com.neillon.weather.data.repository.WeatherRepositoryImpl
 import com.neillon.weather.data.service.WeatherService
@@ -9,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -17,10 +19,27 @@ import retrofit2.converter.gson.GsonConverterFactory
 class WeatherModule {
 
     @Provides
-    fun providesRetrofit() = Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    fun providesRetrofit(): Retrofit {
+        val httpClient = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val original = chain.request()
+                val originalHttpUrl = original.url()
+
+                val url = originalHttpUrl.newBuilder()
+                    .addQueryParameter("key", BuildConfig.API_KEY)
+                    .build()
+
+                val request = original.newBuilder().url(url).build()
+                return@addInterceptor chain.proceed(request)
+            }
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .client(httpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
     @Provides
     fun provideWeatherService(retrofit: Retrofit): WeatherService {

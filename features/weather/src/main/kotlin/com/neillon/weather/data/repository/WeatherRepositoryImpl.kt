@@ -1,6 +1,6 @@
 package com.neillon.weather.data.repository
 
-import com.neillon.common.doApiCall
+import com.neillon.common.network.doApiCall
 import com.neillon.weather.data.service.WeatherApiResponse
 import com.neillon.weather.data.service.WeatherService
 import com.neillon.weather.domain.Weather
