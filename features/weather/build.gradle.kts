@@ -68,6 +68,11 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.google.gson)
 
+    
+    //Coil
+    implementation(libs.io.coil.compose)
+    implementation(libs.io.coil.network)
+    
     // To use SimpleStorage abstraction
     implementation(project(":libraries:common"))
 }

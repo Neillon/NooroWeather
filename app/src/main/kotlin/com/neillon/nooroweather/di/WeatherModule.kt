@@ -23,7 +23,7 @@ class WeatherModule {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val original = chain.request()
-                val originalHttpUrl = original.url()
+                val originalHttpUrl = original.url
 
                 val url = originalHttpUrl.newBuilder()
                     .addQueryParameter("key", BuildConfig.API_KEY)
