@@ -61,6 +61,7 @@ class WeatherViewModel @Inject constructor(
         humidity = humidity,
         uv = uv.toInt(),
         feelsLike = feelsLike.toInt(),
+        iconUrl = iconUrl.substring(2)
     )
 
     // Public

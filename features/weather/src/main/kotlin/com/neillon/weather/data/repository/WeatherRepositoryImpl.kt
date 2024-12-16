@@ -25,5 +25,6 @@ class WeatherRepositoryImpl @Inject constructor(
         humidity = current.humidity,
         uv = current.uv,
         feelsLike = current.feelslikeC,
+        iconUrl = current.condition.icon
     )
 }

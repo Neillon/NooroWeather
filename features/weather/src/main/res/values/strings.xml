@@ -4,6 +4,14 @@
     <string name="no_Selected_city">No City Selected</string>
     <string name="search_recommendation">Please Search For A City</string>
     <string name="search_location">Search Location</string>
-    <string name="temperature">%dº</string>
+    <string name="temperature_content">%dº</string>
+
+    <string name="humidity">Humidity</string>
+    <string name="humidity_content">%d\%%</string>
+
+    <string name="uv">UV</string>
+    <string name="uv_content">%d</string>
+
+    <string name="feels_like">Feels Like</string>
 
 </resources>

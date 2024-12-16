@@ -1,12 +1,12 @@
 package com.neillon.weather.presentation
 
+import android.view.RoundedCorner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,6 +27,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neillon.weather.R
 import com.neillon.weather.presentation.components.CitySearchBar
+import com.neillon.weather.presentation.components.EmptyContent
+import com.neillon.weather.presentation.components.SelectableCityItem
+import com.neillon.weather.presentation.components.UnsetCityContent
+import com.neillon.weather.presentation.components.WeatherContent
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
@@ -36,9 +39,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
     WeatherScreenContent(
         uiState = state.value,
         onSearch = { query ->
-            if (query.isEmpty() && state.value is WeatherUiState.Searching) {
-                viewModel.onSearchCleared()
-            } else {
+            if (query.isNotEmpty()) {
                 viewModel.onSearch(query)
             }
         },
@@ -58,15 +59,13 @@ private fun WeatherScreenContent(
         }
     ) { innerPadding ->
         when (uiState) {
-            WeatherUiState.Empty -> NoSelectedCityContent(modifier = Modifier.padding(innerPadding))
-            is WeatherUiState.Idle ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Green)
-                )
+            WeatherUiState.Empty -> UnsetCityContent(modifier = Modifier.padding(innerPadding))
+            is WeatherUiState.Idle -> WeatherContent(
+                modifier = Modifier.padding(innerPadding),
+                uiState.weatherData
+            )
 
-            is WeatherUiState.Searching -> WeatherSearchingStateContent(
+            is WeatherUiState.Searching -> WeatherSearchingContent(
                 modifier = Modifier.padding(innerPadding),
                 uiState = uiState,
                 onCitySelected = onCitySelected
@@ -75,95 +74,16 @@ private fun WeatherScreenContent(
     }
 }
 
+
 @Composable
-fun WeatherSearchingStateContent(
+fun WeatherSearchingContent(
     modifier: Modifier = Modifier, uiState: WeatherUiState.Searching,
     onCitySelected: (String) -> Unit
 ) {
-    if (uiState.data == null) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        )
-    } else {
+    uiState.data?.let {
         Column {
             Spacer(modifier = Modifier.height(32.dp))
             SelectableCityItem(modifier, onCitySelected, uiState)
         }
-    }
-}
-
-@Composable
-private fun SelectableCityItem(
-    modifier: Modifier = Modifier,
-    onCitySelected: (String) -> Unit,
-    uiState: WeatherUiState.Searching,
-) {
-    require(uiState.data != null)
-    Surface(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .clip(RoundedCornerShape(16.dp)),
-        onClick = { onCitySelected(uiState.query) }
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
-                .clip(RoundedCornerShape(16.dp))
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(uiState.data.city, style = MaterialTheme.typography.headlineSmall)
-                Text(
-                    stringResource(R.string.temperature, uiState.data.temperature ?: 0),
-                    style = MaterialTheme.typography.headlineLarge
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .size(60.dp)
-                    .background(Color.Red)
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun SelectableCityItem() {
-    SelectableCityItem(
-        uiState = WeatherUiState.Searching(
-            query = "Mumbai",
-            data = WeatherData(
-                city = "Mumbai",
-                temperature = 45,
-                humidity = 10,
-                uv = 20,
-                feelsLike = 38,
-            )
-        ),
-        onCitySelected = {}
-    )
-}
-
-@Composable
-fun NoSelectedCityContent(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            stringResource(R.string.no_Selected_city),
-            style = MaterialTheme.typography.headlineLarge
-        )
-        Text(
-            stringResource(R.string.search_recommendation),
-            style = MaterialTheme.typography.headlineSmall
-        )
-    }
+    } ?: EmptyContent()
 }

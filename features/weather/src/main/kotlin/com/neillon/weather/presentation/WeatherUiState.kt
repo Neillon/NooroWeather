@@ -5,7 +5,8 @@ data class WeatherData(
     val temperature: Int,
     val humidity: Int,
     val uv: Int,
-    val feelsLike: Int
+    val feelsLike: Int,
+    val iconUrl: String
 )
 
 sealed class WeatherUiState {
