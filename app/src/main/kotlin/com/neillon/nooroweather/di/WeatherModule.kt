@@ -1,8 +1,8 @@
-package com.neillon.weather.di
+package com.neillon.nooroweather.di
 
 import com.neillon.weather.data.Constants
-import com.neillon.weather.data.WeatherRepositoryImpl
-import com.neillon.weather.data.WeatherService
+import com.neillon.weather.data.repository.WeatherRepositoryImpl
+import com.neillon.weather.data.service.WeatherService
 import com.neillon.weather.domain.WeatherRepository
 import dagger.Module
 import dagger.Provides

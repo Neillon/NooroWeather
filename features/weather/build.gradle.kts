@@ -66,7 +66,6 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter)
     implementation(libs.google.gson)
 
     // To use SimpleStorage abstraction

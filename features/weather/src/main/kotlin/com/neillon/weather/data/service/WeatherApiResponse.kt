@@ -1,8 +1,8 @@
-package com.neillon.weather.data
+package com.neillon.weather.data.service
 
 import com.google.gson.annotations.SerializedName
 
-data class ApiResponse(
+data class WeatherApiResponse(
     @SerializedName("location") var location: Location,
     @SerializedName("current") var current: Current
 )

@@ -76,6 +76,11 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter)
+    implementation(libs.google.gson)
+
     implementation(project(":features:weather"))
     implementation(project(":libraries:common"))
     implementation(project(":libraries:common-android"))
