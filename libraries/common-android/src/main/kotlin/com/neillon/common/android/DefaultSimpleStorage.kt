@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.neillon.common.SimpleStorage
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.util.concurrent.ConcurrentHashMap
 
@@ -36,4 +37,7 @@ class DefaultSimpleStorage(
 
     override fun getValueAsStream(key: String): Flow<String?> =
         context.dataStore.data.map { preferences -> preferences[keyOf(key)] }
+
+    override suspend fun getValue(key: String): String? =
+        context.dataStore.data.map { preferences -> preferences[keyOf(key)] }.firstOrNull()
 }
