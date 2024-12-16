@@ -1,4 +1,4 @@
-package com.neillon.weather.presentation.ui
+package com.neillon.weather.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -1,9 +1,8 @@
-package com.neillon.weather
+package com.neillon.weather.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neillon.common.SimpleStorage
-import com.neillon.weather.presentation.WeatherUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

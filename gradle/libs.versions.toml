@@ -17,6 +17,7 @@ hilt = "2.51.1"
 hiltNavigation = "1.2.0"
 retrofit = "2.11.0"
 gsonConverterFactory = "2.9.0"
+material = "1.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +56,7 @@ kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutin
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 google-gson = { group = "com.google.code.gson", name = "gson", version.ref = "retrofit" }
 retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "gsonConverterFactory" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
