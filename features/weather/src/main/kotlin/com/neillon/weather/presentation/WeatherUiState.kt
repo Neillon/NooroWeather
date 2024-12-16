@@ -9,7 +9,7 @@ data class WeatherData(
 )
 
 sealed class WeatherUiState {
-    object Empty: WeatherUiState()
+    data object Empty: WeatherUiState()
     data class Idle(val weatherData: WeatherData): WeatherUiState()
-    data class Searching(val query: String, val cities: List<String>): WeatherUiState()
+    data class Searching(val query: String, val data: WeatherData? = null): WeatherUiState()
 }

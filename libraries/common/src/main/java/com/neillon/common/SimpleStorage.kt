@@ -22,4 +22,6 @@ interface SimpleStorage {
      * @return A nullable [Flow] with the value retrieved
      */
     fun getValueAsStream(key: String): Flow<String?>
+
+    suspend fun getValue(key: String): String?
 }

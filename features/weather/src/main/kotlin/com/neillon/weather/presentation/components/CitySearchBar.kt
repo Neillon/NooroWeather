@@ -80,10 +80,8 @@ fun CitySearchBar(
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {
-                    if (text.isNotEmpty()) {
-                        keyboardController?.hide()
-                        onSearch(text)
-                    }
+                    keyboardController?.hide()
+                    onSearch(text)
                 }
             )
         )
