@@ -3,7 +3,6 @@ package com.neillon.weather.presentation.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,18 +37,29 @@ fun WeatherContent(modifier: Modifier = Modifier, weatherData: WeatherData) {
     ) {
         // Mid
         Spacer(modifier = Modifier.height(32.dp))
-        AsyncImage(model = weatherData.iconUrl, contentDescription = null)
-        Spacer(modifier = Modifier.height(16.dp))
-        Row {
+        AsyncImage(
+            modifier = Modifier.size(180.dp),
+            contentScale = ContentScale.Fit,
+            clipToBounds = true,
+            model = weatherData.iconUrl,
+            contentDescription = null,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(weatherData.city, style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.width(6.dp))
             Image(painter = painterResource(R.drawable.location_icon), contentDescription = null)
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            stringResource(R.string.temperature_content, weatherData.temperature),
-            style = MaterialTheme.typography.headlineLarge
-        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(verticalAlignment = Alignment.Top) {
+            Text(weatherData.temperature.toString(), style = MaterialTheme.typography.titleLarge)
+            Spacer(modifier = Modifier.width(2.dp))
+            Image(
+                modifier = Modifier.padding(top = 14.dp).size(8.dp),
+                painter = painterResource(R.drawable.temperature_celsius),
+                contentDescription = null
+            )
+        }
 
         // Bottom
         Spacer(modifier = Modifier.height(32.dp))

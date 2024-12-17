@@ -46,7 +46,7 @@ fun CitySearchBar(
             trailingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             value = text,
             onValueChange = { text = it },
-            textStyle = MaterialTheme.typography.labelSmall,
+            textStyle = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurface),
             shape = RoundedCornerShape(16.dp),
             placeholder = {
                 if (text.isEmpty()) {
