@@ -63,11 +63,6 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.kotlinx.coroutines)
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.google.gson)
-
     
     //Coil
     implementation(libs.io.coil.compose)
@@ -75,4 +70,5 @@ dependencies {
     
     // To use SimpleStorage abstraction
     implementation(project(":libraries:common"))
+    implementation(project(":features:weather:domain"))
 }

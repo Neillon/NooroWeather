@@ -1,4 +1,4 @@
-package com.neillon.weather.domain
+package com.neillon.domain
 
 data class Weather(
     val city: String,

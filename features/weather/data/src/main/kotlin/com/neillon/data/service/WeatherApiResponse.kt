@@ -1,4 +1,4 @@
-package com.neillon.weather.data.service
+package com.neillon.data.service
 
 import com.google.gson.annotations.SerializedName
 
