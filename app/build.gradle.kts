@@ -26,6 +26,7 @@ android {
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
         buildConfigField("String", "API_KEY", "${properties.getProperty("API_KEY")}")
+        buildConfigField("String", "BASE_URL", "${properties.getProperty("BASE_URL")}")
     }
 
     buildTypes {
@@ -88,7 +89,11 @@ dependencies {
     implementation(libs.retrofit.converter)
     implementation(libs.google.gson)
 
+    // Weather feature
     implementation(project(":features:weather"))
+    implementation(project(":features:weather:domain"))
+    implementation(project(":features:weather:data"))
+
     implementation(project(":libraries:common"))
     implementation(project(":libraries:common-android"))
 }

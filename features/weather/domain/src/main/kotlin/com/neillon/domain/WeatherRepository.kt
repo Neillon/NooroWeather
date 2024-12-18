@@ -1,4 +1,4 @@
-package com.neillon.weather.domain
+package com.neillon.domain
 
 interface WeatherRepository {
     suspend fun search(query: String): Weather

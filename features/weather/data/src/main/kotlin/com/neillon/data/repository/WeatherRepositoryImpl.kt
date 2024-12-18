@@ -1,10 +1,10 @@
-package com.neillon.weather.data.repository
+package com.neillon.data.repository
 
 import com.neillon.common.network.doApiCall
-import com.neillon.weather.data.service.WeatherApiResponse
-import com.neillon.weather.data.service.WeatherService
-import com.neillon.weather.domain.Weather
-import com.neillon.weather.domain.WeatherRepository
+import com.neillon.data.service.WeatherApiResponse
+import com.neillon.data.service.WeatherService
+import com.neillon.domain.Weather
+import com.neillon.domain.WeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 

@@ -1,10 +1,9 @@
 package com.neillon.nooroweather.di
 
 import com.neillon.nooroweather.BuildConfig
-import com.neillon.weather.data.Constants
-import com.neillon.weather.data.repository.WeatherRepositoryImpl
-import com.neillon.weather.data.service.WeatherService
-import com.neillon.weather.domain.WeatherRepository
+import com.neillon.data.repository.WeatherRepositoryImpl
+import com.neillon.data.service.WeatherService
+import com.neillon.domain.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +34,7 @@ class WeatherModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
