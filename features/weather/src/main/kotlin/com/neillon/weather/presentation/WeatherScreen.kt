@@ -1,36 +1,19 @@
 package com.neillon.weather.presentation
 
-import android.view.RoundedCorner
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import android.util.Log
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.neillon.weather.R
-import com.neillon.weather.presentation.components.CitySearchBar
+import com.neillon.weather.presentation.components.CityWeatherSearchBar
 import com.neillon.weather.presentation.components.EmptyContent
-import com.neillon.weather.presentation.components.SelectableCityItem
-import com.neillon.weather.presentation.components.UnsetCityContent
+import com.neillon.weather.presentation.components.EmptyWeatherDataContent
 import com.neillon.weather.presentation.components.WeatherContent
+import com.neillon.weather.presentation.components.WeatherSearchContent
+
+const val TAG = "Neillon"
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
@@ -38,12 +21,12 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
 
     WeatherScreenContent(
         uiState = state.value,
-        onSearch = { query ->
-            if (query.isNotEmpty()) {
-                viewModel.onSearch(query)
-            }
-        },
-        onCitySelected = viewModel::onCitySelected
+        onSearch = viewModel::onSearch,
+        onCitySelected = viewModel::onCitySelected,
+        onSearchUpdate = { prev, curr ->
+            // Refresh UI state since search was cleared -> Present current city data
+            viewModel.onSearchUpdate(prev, curr)
+        }
     )
 }
 
@@ -51,39 +34,41 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
 private fun WeatherScreenContent(
     uiState: WeatherUiState,
     onSearch: (String) -> Unit,
+    onSearchUpdate: (prev: String, curr: String) -> Unit,
     onCitySelected: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
-            CitySearchBar(onSearch = onSearch)
+            CityWeatherSearchBar(
+                searchState = uiState.searchState,
+                onSearch = onSearch,
+                onSearchUpdate = onSearchUpdate
+            )
         }
     ) { innerPadding ->
-        when (uiState) {
-            WeatherUiState.Empty -> UnsetCityContent(modifier = Modifier.padding(innerPadding))
-            is WeatherUiState.Idle -> WeatherContent(
-                modifier = Modifier.padding(innerPadding),
-                uiState.weatherData
-            )
+        val modifier = Modifier.padding(innerPadding)
+        Log.i(TAG, "WeatherScreenContent: Searching? ${uiState.searchState.isSearching}")
+        when {
+            uiState.searchState.isSearching -> if (uiState.searchState.isEmptyWeatherData) {
+                EmptyContent()
+            } else {
+                uiState.searchState.weatherData?.let { data ->
+                    Log.i(TAG, "WeatherScreenContent: Has data -> $data")
+                    WeatherSearchContent(
+                        modifier = modifier,
+                        weatherData = data,
+                        onCitySelected = onCitySelected
+                    )
+                }
+            }
 
-            is WeatherUiState.Searching -> WeatherSearchingContent(
-                modifier = Modifier.padding(innerPadding),
-                uiState = uiState,
-                onCitySelected = onCitySelected
-            )
+            uiState.isEmptyWeatherData ->
+                EmptyWeatherDataContent(modifier = modifier)
+
+            uiState.hasWeatherData -> uiState.weatherData?.let { data ->
+                WeatherContent(modifier = modifier, weatherData = data)
+            }
         }
     }
 }
 
-
-@Composable
-fun WeatherSearchingContent(
-    modifier: Modifier = Modifier, uiState: WeatherUiState.Searching,
-    onCitySelected: (String) -> Unit
-) {
-    uiState.data?.let {
-        Column {
-            Spacer(modifier = Modifier.height(32.dp))
-            SelectableCityItem(modifier, onCitySelected, uiState)
-        }
-    } ?: EmptyContent()
-}

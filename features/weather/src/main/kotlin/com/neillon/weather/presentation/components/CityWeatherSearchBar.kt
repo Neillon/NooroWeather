@@ -27,14 +27,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neillon.weather.R
+import com.neillon.weather.presentation.WeatherSearchState
 
 @Composable
-fun CitySearchBar(
+fun CityWeatherSearchBar(
     modifier: Modifier = Modifier,
+    searchState: WeatherSearchState = WeatherSearchState.empty(),
+    onSearchUpdate: (prev: String, curr: String) -> Unit,
     onSearch: (String) -> Unit
 ) {
-    var text by rememberSaveable { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
+    var text by rememberSaveable { mutableStateOf(searchState.query) }
 
     Box(
         modifier = modifier
@@ -45,7 +47,10 @@ fun CitySearchBar(
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             value = text,
-            onValueChange = { text = it },
+            onValueChange = { newText ->
+                onSearchUpdate(text, newText)
+                text = newText
+            },
             textStyle = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurface),
             shape = RoundedCornerShape(16.dp),
             placeholder = {
@@ -80,7 +85,6 @@ fun CitySearchBar(
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {
-                    keyboardController?.hide()
                     onSearch(text)
                 }
             )
@@ -92,5 +96,8 @@ fun CitySearchBar(
 @Preview
 @Composable
 private fun CitySearchBarPreview() {
-    CitySearchBar {}
+    CityWeatherSearchBar(
+        searchState = WeatherSearchState.empty(),
+        onSearch = {},
+        onSearchUpdate = { _, _ -> })
 }

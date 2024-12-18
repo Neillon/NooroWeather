@@ -3,7 +3,6 @@ package com.neillon.weather.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.neillon.domain.Weather
 import com.neillon.domain.WeatherRepository
 import com.neillon.common.SimpleStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,59 +26,69 @@ class WeatherViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Empty)
+    private val _uiState = MutableStateFlow(WeatherUiState.empty())
     val uiState: StateFlow<WeatherUiState>
         get() = _uiState.asStateFlow()
     private var isInitialized = false
 
     init {
-        viewModelScope.launch {
-            simpleStorage.getValueAsStream(CITY)
-                .distinctUntilChanged()
-                .flatMapLatest { performSearch(it.orEmpty()) }
-                .collect { _uiState.value = it }
+        if (!isInitialized) {
+            viewModelScope.launch {
+                simpleStorage.getValueAsStream(CITY)
+                    .distinctUntilChanged()
+                    .flatMapLatest { fetchCityWeather(it.orEmpty()) }
+                    .collect { _uiState.value = it }
+            }
         }
 
         isInitialized = true
     }
 
-    private fun performSearch(city: String): Flow<WeatherUiState> = flow {
+    private fun fetchCityWeather(city: String): Flow<WeatherUiState> = flow {
         runCatching {
-            val weather = weatherRepository.search(city)
-            emit(WeatherUiState.Idle(weather.toPresentationModel()))
+            val weatherInformation = weatherRepository.search(city)
+            emit(WeatherUiState(weatherData = weatherInformation.toPresentationModel()))
         }.getOrElse {
-            emit(WeatherUiState.Empty)
+            emit(WeatherUiState.empty())
         }
     }
-
-    private fun Weather.toPresentationModel() = WeatherData(
-        city = city,
-        temperature = temperature.toInt(),
-        humidity = humidity,
-        uv = uv.toInt(),
-        feelsLike = feelsLike.toInt(),
-        iconUrl = "https:" + iconUrl.replace("64x64", "128x128")
-    )
 
     // Public
     fun onSearch(cityName: String) = viewModelScope.launch {
-        _uiState.value = WeatherUiState.Searching(cityName)
         try {
-            val weatherData = weatherRepository.search(cityName)
-            _uiState.value = WeatherUiState.Searching(cityName, weatherData.toPresentationModel())
-        } catch (e: Exception) {
-            Log.i("Neilon", "onSearch: Error trying to serach -> ${e.message}")
-            _uiState.value = WeatherUiState.Searching(cityName)
-        }
-    }
+            val weatherInformation = weatherRepository.search(cityName)
 
-    fun onSearchCleared() = viewModelScope.launch {
-        simpleStorage.getValue(CITY)?.let(::onCitySelected) ?: run {
-            _uiState.value = WeatherUiState.Empty
+            val searchState = _uiState.value.searchState
+            _uiState.value = _uiState.value.copy(
+                searchState = searchState.copy(
+                    query = cityName,
+                    weatherData = weatherInformation.toPresentationModel()
+                )
+            )
+        } catch (e: Exception) {
+            Log.i(TAG, "onSearch: Error trying to search for city -> ${e.message}")
         }
     }
 
     fun onCitySelected(name: String) = viewModelScope.launch {
         simpleStorage.storeValue(CITY, name)
+        onSearchCleared()
     }
+
+    fun onSearchUpdate(prev: String, curr: String) {
+        val searchState = _uiState.value.searchState
+        _uiState.value = _uiState.value.copy(
+            searchState = searchState.copy(
+                query = curr
+            )
+        )
+        if (prev.isNotEmpty() && curr.isEmpty()) {
+            onSearchCleared()
+        }
+    }
+
+    private fun onSearchCleared() = viewModelScope.launch {
+        _uiState.value = _uiState.value.copy(searchState = WeatherSearchState.empty())
+    }
+
 }

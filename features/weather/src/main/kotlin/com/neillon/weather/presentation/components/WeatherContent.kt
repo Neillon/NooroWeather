@@ -29,7 +29,7 @@ import com.neillon.weather.R
 import com.neillon.weather.presentation.WeatherData
 
 @Composable
-fun WeatherContent(modifier: Modifier = Modifier, weatherData: WeatherData) {
+internal fun WeatherContent(modifier: Modifier = Modifier, weatherData: WeatherData) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,

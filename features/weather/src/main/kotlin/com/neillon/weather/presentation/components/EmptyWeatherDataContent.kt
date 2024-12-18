@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import com.neillon.weather.R
 
 @Composable
-fun UnsetCityContent(modifier: Modifier = Modifier) {
+internal fun EmptyWeatherDataContent(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
