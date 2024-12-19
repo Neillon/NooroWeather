@@ -23,10 +23,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
         uiState = state.value,
         onSearch = viewModel::onSearch,
         onCitySelected = viewModel::onCitySelected,
-        onSearchUpdate = { prev, curr ->
-            // Refresh UI state since search was cleared -> Present current city data
-            viewModel.onSearchUpdate(prev, curr)
-        }
+        onSearchUpdate = viewModel::onSearchUpdate // Refresh UI state since search was cleared -> Present current city data
     )
 }
 
@@ -47,7 +44,6 @@ private fun WeatherScreenContent(
         }
     ) { innerPadding ->
         val modifier = Modifier.padding(innerPadding)
-        Log.i(TAG, "WeatherScreenContent: Searching? ${uiState.searchState.isSearching}")
         when {
             uiState.searchState.isSearching -> if (uiState.searchState.isEmptyWeatherData) {
                 EmptyContent()
