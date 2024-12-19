@@ -49,5 +49,6 @@ dependencies {
     implementation(libs.google.gson)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
 }
