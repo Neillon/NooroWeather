@@ -52,10 +52,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
     // Hilt
     implementation(libs.hilt)
     implementation(libs.hilt.navigation)
@@ -67,6 +63,11 @@ dependencies {
     //Coil
     implementation(libs.io.coil.compose)
     implementation(libs.io.coil.network)
+
+    // Test-only implementations
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     
     // To use SimpleStorage abstraction
     implementation(project(":libraries:common"))

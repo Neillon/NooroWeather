@@ -71,7 +71,6 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun onCitySelected(name: String) = viewModelScope.launch {
-        Log.i(TAG, "onCitySelected: City was selected")
         simpleStorage.storeValue(CITY, name)
         onSearchCleared()
     }
@@ -90,6 +89,5 @@ class WeatherViewModel @Inject constructor(
 
     private fun onSearchCleared() = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(searchState = WeatherSearchState.empty())
-        Log.i(TAG, "onSearchCleared: Search was cleared ${_uiState.value.searchState.query}")
     }
 }
